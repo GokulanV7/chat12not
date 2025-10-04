@@ -1,73 +1,100 @@
-# Welcome to your Lovable project
+# Vidhvaa Helper Bot
 
-## Project info
+An interactive chatbot for Vidhvaa's 50 Days Challenge educational platform. This bot helps users get instant answers about the challenge, provides guided question flows, and connects users with human support when needed.
 
-**URL**: https://lovable.dev/projects/db83d49a-8821-44b3-a99d-0f94205f537a
+## Features
 
-## How can I edit this code?
+- 🤖 **Interactive Chatbot**: Get instant answers to common questions about the 50 Days Challenge
+- 📱 **Responsive Design**: Works seamlessly across desktop and mobile devices
+- 🎯 **Smart Question Flow**: Progressive question system with 4-question sets and answer tracking
+- 💬 **WhatsApp Integration**: Connect with human support via WhatsApp within 10 minutes
+- 🎨 **Modern UI**: Built with shadcn-ui components and Tailwind CSS
+- ⚡ **Fast Performance**: Powered by Vite and React with TypeScript
 
-There are several ways of editing your application.
+## Getting Started
 
-**Use Lovable**
+### Prerequisites
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/db83d49a-8821-44b3-a99d-0f94205f537a) and start prompting.
+- Node.js (v16 or higher)
+- npm or yarn
 
-Changes made via Lovable will be committed automatically to this repo.
+### Installation
 
-**Use your preferred IDE**
+```bash
+# Clone the repository
+git clone <repository-url>
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+# Navigate to the project directory
+cd vidhvaa-helper-bot
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+# Install dependencies
+npm install
 
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The application will be available at `http://localhost:8080`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Technologies Used
 
-**Use GitHub Codespaces**
+- **Frontend Framework**: React 18 with TypeScript
+- **Build Tool**: Vite
+- **UI Components**: shadcn-ui
+- **Styling**: Tailwind CSS
+- **Icons**: Lucide React
+- **State Management**: React Hooks (useState, useEffect)
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## Project Structure
 
-## What technologies are used for this project?
+```
+src/
+├── components/
+│   ├── ChatWidget.tsx      # Main chatbot component
+│   └── ui/                 # shadcn-ui components
+├── pages/
+│   ├── Index.tsx           # Landing page
+│   └── NotFound.tsx        # 404 page
+├── hooks/                  # Custom React hooks
+├── lib/
+│   └── utils.ts           # Utility functions
+└── App.tsx                # Main application component
+```
 
-This project is built with:
+## Available Scripts
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-## How can I deploy this project?
+## Chatbot Features
 
-Simply open [Lovable](https://lovable.dev/projects/db83d49a-8821-44b3-a99d-0f94205f537a) and click on Share -> Publish.
+### Question Flow System
+- **7 Question Sets**: Each containing 4 related questions about the 50 Days Challenge
+- **Progressive Navigation**: Users can move through sets at their own pace
+- **Answer Tracking**: System tracks which questions have been answered
+- **Smart Filtering**: Answered questions are hidden from current set
 
-## Can I connect a custom domain to my Lovable project?
+### User Journey
+1. **Welcome**: Greet user and collect basic information (name, phone)
+2. **Support Choice**: User chooses between human support or self-service questions
+3. **Human Support**: Promises WhatsApp contact within 10 minutes
+4. **Question Guide**: Progressive 4-question sets with completion tracking
+5. **Thank You**: Final acknowledgment with option to restart
 
-Yes, you can!
+## Contributing
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## License
+
+This project is licensed under the MIT License.
+
+## Support
+
+For support, contact the Vidhvaa team or open an issue in this repository.
