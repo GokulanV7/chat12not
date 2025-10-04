@@ -269,6 +269,18 @@ export function ChatWidget() {
     setStep("faq");
   };
 
+  const handleSkipToNextSet = () => {
+    if (currentQuestionSet < faqGroups.length - 1) {
+      addMessage("user", "Skip to next 4 questions");
+      setCurrentQuestionSet(prev => prev + 1);
+      setAnsweredInCurrentSet([]);
+      addMessage("bot", `Skipped to Question Set ${currentQuestionSet + 2} of ${faqGroups.length}. Please select a question:`);
+      // Stay in faq step to show new questions
+    } else {
+      addMessage("bot", "You've reached the last set of questions!");
+    }
+  };
+
   const handleEndChat = () => {
     addMessage("user", "No, thank you");
     addMessage("bot", "Thank you for contacting Vidhvaa Support! We hope we've been helpful. Feel free to reach out anytime you have questions about the 50 Days Challenge. Good luck! 🎯");
@@ -432,6 +444,19 @@ export function ChatWidget() {
                       </Button>
                     );
                   })}
+                  
+                  {/* Skip to next question set button */}
+                  {currentQuestionSet < faqGroups.length - 1 && (
+                    <div className="pt-3 border-t border-border mt-4">
+                      <Button
+                        onClick={handleSkipToNextSet}
+                        variant="secondary"
+                        className="w-full bg-slate-600 hover:bg-slate-700 text-white border-slate-500"
+                      >
+                        <span className="text-sm font-medium">🔄 Next 4 Questions (Skip Current Set)</span>
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
 
