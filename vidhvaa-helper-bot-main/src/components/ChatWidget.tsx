@@ -218,27 +218,39 @@ export function ChatWidget() {
 
   const handleQuestionSelect = (faq: typeof faqGroups[0][0], questionIndex: number) => {
     addMessage("user", faq.question);
-    addMessage("bot", faq.answer);
     
-    // Track the user's answer
-    setUserAnswers(prev => [...prev, { question: faq.question, answer: faq.answer }]);
-    setAnsweredInCurrentSet(prev => [...prev, questionIndex]);
-    
+    // Hide question list temporarily while showing answer
     setStep("answer");
+    
+    // Show the answer after a brief delay
     setTimeout(() => {
-      const remainingInSet = 4 - answeredInCurrentSet.length - 1;
-      const remainingSets = faqGroups.length - currentQuestionSet - (remainingInSet === 0 ? 1 : 0);
+      addMessage("bot", faq.answer);
       
-      if (remainingInSet > 0) {
-        addMessage("bot", `You have ${remainingInSet} more questions in this set. Would you like to continue?`);
-      } else if (remainingSets > 0) {
-        addMessage("bot", `Great! You've completed this set. We have ${remainingSets} more sets available. Would you like to continue to the next set?`);
-      } else {
-        addMessage("bot", "Congratulations! You've gone through all our questions. Thank you for using our help system!");
-        setStep("thankyou");
-        return;
-      }
-    }, 1000);
+      // Track the user's answer
+      setUserAnswers(prev => [...prev, { question: faq.question, answer: faq.answer }]);
+      setAnsweredInCurrentSet(prev => [...prev, questionIndex]);
+      
+      // Show follow-up message and bring back question list after user reads the answer
+      setTimeout(() => {
+        // Calculate remaining questions correctly by adding 1 to current length since we just added one
+        const newAnsweredCount = answeredInCurrentSet.length + 1;
+        const remainingInSet = 4 - newAnsweredCount;
+        const remainingSets = faqGroups.length - currentQuestionSet - (remainingInSet === 0 ? 1 : 0);
+        
+        if (remainingInSet > 0) {
+          addMessage("bot", `You have ${remainingInSet} more questions in this set. You can select another question below.`);
+        } else if (remainingSets > 0) {
+          addMessage("bot", `Great! You've completed this set. We have ${remainingSets} more sets available. You can continue to the next set.`);
+        } else {
+          addMessage("bot", "Congratulations! You've gone through all our questions. Thank you for using our help system!");
+          setStep("thankyou");
+          return;
+        }
+        
+        // Bring back the question list after the follow-up message
+        setStep("faq");
+      }, 2500); // Give user time to read the answer
+    }, 500);
   };
 
   const resetChat = () => {
@@ -389,21 +401,10 @@ export function ChatWidget() {
               )}
 
               {step === "answer" && (
-                <div className="flex gap-2 justify-start animate-in fade-in duration-300">
-                  <Button
-                    onClick={handleNextQuestion}
-                    size="lg"
-                    className="bg-primary hover:bg-primary/90"
-                  >
-                    Yes, Another Question
-                  </Button>
-                  <Button
-                    onClick={handleEndChat}
-                    size="lg"
-                    variant="outline"
-                  >
-                    No, Thank You
-                  </Button>
+                <div className="flex justify-center animate-in fade-in duration-300">
+                  <div className="text-sm text-muted-foreground italic">
+                    Reading answer... 📖
+                  </div>
                 </div>
               )}
 
@@ -432,22 +433,30 @@ export function ChatWidget() {
                     Question Set {currentQuestionSet + 1} of {faqGroups.length} - Select a question:
                   </p>
                   {faqGroups[currentQuestionSet]?.map((faq, idx) => {
-                    if (answeredInCurrentSet.includes(idx)) return null;
+                    const isAnswered = answeredInCurrentSet.includes(idx);
                     return (
                       <Button
                         key={idx}
-                        onClick={() => handleQuestionSelect(faq, idx)}
-                        variant="outline"
-                        className="w-full text-left h-auto py-3 px-3 justify-start hover:bg-muted"
+                        onClick={() => !isAnswered && handleQuestionSelect(faq, idx)}
+                        variant={isAnswered ? "secondary" : "outline"}
+                        disabled={isAnswered}
+                        className={`w-full text-left h-auto py-3 px-3 justify-start ${
+                          isAnswered 
+                            ? "bg-green-100 border-green-300 text-green-800 cursor-not-allowed" 
+                            : "hover:bg-muted"
+                        }`}
                       >
-                        <span className="text-sm leading-relaxed break-words whitespace-normal">{faq.question}</span>
+                        <span className="text-sm leading-relaxed break-words whitespace-normal">
+                          {isAnswered && "✓ "}{faq.question}
+                        </span>
                       </Button>
                     );
                   })}
                   
-                  {/* Skip to next question set button */}
-                  {currentQuestionSet < faqGroups.length - 1 && (
-                    <div className="pt-3 border-t border-border mt-4">
+                  {/* Action buttons */}
+                  <div className="pt-3 border-t border-border mt-4 space-y-2">
+                    {/* Skip to next question set button */}
+                    {currentQuestionSet < faqGroups.length - 1 && (
                       <Button
                         onClick={handleSkipToNextSet}
                         variant="secondary"
@@ -455,8 +464,17 @@ export function ChatWidget() {
                       >
                         <span className="text-sm font-medium">🔄 Next 4 Questions (Skip Current Set)</span>
                       </Button>
-                    </div>
-                  )}
+                    )}
+                    
+                    {/* End Chat button */}
+                    <Button
+                      onClick={handleEndChat}
+                      variant="outline"
+                      className="w-full border-red-300 text-red-600 hover:bg-red-50"
+                    >
+                      <span className="text-sm font-medium">End Chat</span>
+                    </Button>
+                  </div>
                 </div>
               )}
 
